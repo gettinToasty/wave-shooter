@@ -30,7 +30,9 @@ public class PlayerMovement : MonoBehaviour {
 		if(groundPlane.Raycast(cameraRay, out rayLength)) {
 			Vector3 pointToLook = cameraRay.GetPoint(rayLength);
 
-			transform.LookAt(pointToLook);
+			Vector3 playerLook = new Vector3(pointToLook.x, transform.position.y, pointToLook.z);
+
+			transform.LookAt(playerLook);
 		}
 
 		rb.velocity = velocity;
