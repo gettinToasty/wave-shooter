@@ -5,15 +5,32 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour {
 
 	public float speed;
+	public float fireDelta;
+	public GameObject projectile;
 
 	private Rigidbody rb;
 
 	private Camera mainCamera;
+	private float nextFire = 0.5f;
+	private float myTime = 0.0f;
+	private GameObject newProjectile;
 
 	// Use this for initialization
 	void Start() {
 		rb = GetComponent<Rigidbody>();
 		mainCamera = FindObjectOfType<Camera>();
+	}
+
+	void Update() {
+		myTime = myTime + Time.deltaTime;
+
+		if(Input.GetButton("Fire1") && myTime > nextFire) {
+			nextFire = myTime + fireDelta;
+			newProjectile = Instantiate(projectile, transform.position, transform.rotation) as GameObject;
+
+			nextFire = nextFire - myTime;
+			myTime = 0.0f;
+		}
 	}
 	
 	void FixedUpdate() {
