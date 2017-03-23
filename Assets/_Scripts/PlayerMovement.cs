@@ -8,9 +8,12 @@ public class PlayerMovement : MonoBehaviour {
 
 	private Rigidbody rb;
 
+	private Camera mainCamera;
+
 	// Use this for initialization
 	void Start() {
 		rb = GetComponent<Rigidbody>();
+		mainCamera = FindObjectOfType<Camera>();
 	}
 	
 	void FixedUpdate() {
@@ -19,6 +22,16 @@ public class PlayerMovement : MonoBehaviour {
 
 		Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 		Vector3 velocity = movement * speed;
+
+		Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+		Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+		float rayLength;
+
+		if(groundPlane.Raycast(cameraRay, out rayLength)) {
+			Vector3 pointToLook = cameraRay.GetPoint(rayLength);
+
+			transform.LookAt(pointToLook);
+		}
 
 		rb.velocity = velocity;
 	}
